@@ -1,18 +1,16 @@
 apply plugin: 'com.android.application'
-apply plugin: 'org.robolectric'
 apply plugin: 'jacoco'
 apply plugin: 'com.github.kt3k.coveralls'
 apply plugin: 'com.github.ben-manes.versions'
 
 buildscript {
     repositories {
-        mavenCentral() // versions plugin
+        mavenCentral()
         jcenter()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.1.3'
-        classpath 'org.robolectric:robolectric-gradle-plugin:1.0.1'
+        classpath 'com.android.tools.build:gradle:1.2.2'
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.3.1'
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.9'
     }
@@ -41,14 +39,14 @@ tasks.withType(Test) {
 
 android {
     compileSdkVersion 22
-    buildToolsVersion "22.0.1"
+    buildToolsVersion '22.0.1'
 
     defaultConfig {
-        applicationId "burrows.apps.mathapp"
+        applicationId 'burrows.apps.mathapp'
         minSdkVersion 9
         targetSdkVersion 22
         versionCode 1
-        versionName "1.0"
+        versionName '1.0'
     }
 
     compileOptions {
@@ -68,11 +66,6 @@ android {
     }
 }
 
-robolectric {
-  include '**/*Test.class'
-  exclude '**/espresso/**/*.class'
-}
-
 dependencies {
     compile 'com.android.support:appcompat-v7:22.1.1'
     compile 'com.android.support:cardview-v7:22.1.1'
@@ -88,31 +81,31 @@ dependencies {
 }
 
 task jacocoTestReport(type: JacocoReport, dependsOn: 'testDebug') {
-            group = 'Reporting'
-            description = 'Generate Jacoco coverage reports after running tests.'
+    group = 'Reporting'
+    description = 'Generate Jacoco coverage reports after running tests.'
 
-            reports {
-                xml.enabled = true
-                html.enabled = true
-            }
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
 
-            classDirectories = fileTree(
-                    dir: 'build/intermediates/classes/debug',
-                    excludes: [
-                            '**/R*.class',
-                            '**/BuildConfig*'
-                    ]
-            )
+    classDirectories = fileTree(
+            dir: 'build/intermediates/classes/debug',
+            excludes: [
+                    '**/R*.class',
+                    '**/BuildConfig*'
+            ]
+    )
 
-            sourceDirectories = files('src/main/java')
-            executionData = files('build/jacoco/testDebug.exec')
+    sourceDirectories = files('src/main/java')
+    executionData = files('build/jacoco/testDebug.exec')
 
-            doFirst {
-                files('build/intermediates/classes/debug').getFiles().each { file ->
-                    if (file.name.contains('$$')) {
-                        file.renameTo(file.path.replace('$$', '$'))
-                    }
-                }
+    doFirst {
+        files('build/intermediates/classes/debug').getFiles().each { file ->
+            if (file.name.contains('$$')) {
+                file.renameTo(file.path.replace('$$', '$'))
             }
         }
+    }
+}
 
