@@ -1,11 +1,6 @@
 package burrows.apps.mathapp.type;
 
 
-import android.support.annotation.NonNull;
-
-import java.lang.Override;
-import java.lang.String;
-
 /**
  * Class which represents a variable in an equation.
  */
@@ -37,9 +32,9 @@ public class Variable {
      * @param expression String containing the expression to solve for the
      *                   variable
      */
-    private Variable(@NonNull final String name,
-                     @NonNull final String symbol,
-                     @NonNull final String expression) {
+    private Variable(final String name,
+                     final String symbol,
+                     final String expression) {
         this.name = name;
         this.symbol = symbol;
         this.expression = expression;
@@ -50,7 +45,7 @@ public class Variable {
      *
      * @param builder Builder used to build the variable
      */
-    private Variable(@NonNull final Builder builder) {
+    private Variable(final Builder builder) {
         this(builder.name, builder.symbol, builder.epxression);
     }
 
@@ -111,7 +106,7 @@ public class Variable {
     /**
      * Builder class for the Variable class
      */
-    static class Builder {
+    public static class Builder {
         /**
          * Name of the Variable being built
          */
@@ -131,7 +126,7 @@ public class Variable {
          * @param name String containing the new value for the name field
          * @return Builder current instance of the builder
          */
-        public Builder withName(@NonNull final String name) {
+        public Builder withName(final String name) {
             this.name = name;
             return this;
         }
@@ -142,7 +137,7 @@ public class Variable {
          * @param symbol String containing the symbol of the variable
          * @return Builder current instance of the builder
          */
-        public Builder withSymbol(@NonNull final String symbol) {
+        public Builder withSymbol(final String symbol) {
             this.symbol = symbol;
             return this;
         }
@@ -154,7 +149,7 @@ public class Variable {
          *                   variable
          * @return Builder current instance of the builder
          */
-        public Builder withExpression(@NonNull final String expression) {
+        public Builder withExpression(final String expression) {
             this.epxression = expression;
             return this;
         }

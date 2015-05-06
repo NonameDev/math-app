@@ -1,7 +1,5 @@
 package burrows.apps.mathapp.type;
 
-import android.support.annotation.NonNull;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -37,9 +35,9 @@ public class Equation {
      * @param variables Set of Variables that make up the equation
      * @param keywords Set of Strings that describe the equation
      */
-    private Equation(@NonNull final String name,
-                     @NonNull final Set<Variable> variables,
-                     @NonNull final Set<String> keywords) {
+    private Equation(final String name,
+                     final Set<Variable> variables,
+                     final Set<String> keywords) {
         this.name = name;
         this.variables = variables;
         this.keywords = keywords;
@@ -51,7 +49,7 @@ public class Equation {
      *
      * @param builder Builder used to build the equation
      */
-    private Equation(@NonNull final Builder builder) {
+    private Equation(final Builder builder) {
         this(builder.name, builder.variables, builder.keywords);
     }
 
@@ -116,7 +114,7 @@ public class Equation {
     /**
      * Builder class for the Equation class
      */
-    static class Builder {
+    public static class Builder {
 
         /**
          * Name of the equation being built
@@ -145,7 +143,7 @@ public class Equation {
          * @param name String containing the name of the equation
          * @return Builder current instance of the Builder
          */
-        public Builder withName(@NonNull final String name) {
+        public Builder withName(final String name) {
             this.name = name;
             return this;
         }
@@ -156,8 +154,10 @@ public class Equation {
          * @param variable Variable which will be added to the variables field
          * @return Builder current instance of the builder
          */
-        public Builder withVariable(@NonNull final Variable variable) {
-            this.variables.add(variable);
+        public Builder withVariable(final Variable ... variable) {
+            for (final Variable var : variable) {
+                this.variables.add(var);
+            }
             return this;
         }
 
@@ -168,7 +168,7 @@ public class Equation {
          *                the keywords field
          * @return Builder current instance of the builder
          */
-        public Builder withKeyWord(@NonNull final String ... keyWord) {
+        public Builder withKeyWord(final String ... keyWord) {
             for (final String k : keyWord) {
                 this.keywords.add(k);
             }
