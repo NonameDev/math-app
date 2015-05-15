@@ -1,26 +1,5 @@
 apply plugin: 'java'
 
-repositories {
-    jcenter()
-}
-
-tasks.withType(JavaCompile) {
-    sourceCompatibility = JavaVersion.VERSION_1_7
-    targetCompatibility = JavaVersion.VERSION_1_7
-
-    configure(options) {
-        compilerArgs << '-Xlint:all' << '-Xlint:-options'
-        deprecation = true
-        encoding = 'UTF-8'
-    }
-}
-
-tasks.withType(Test) {
-    testLogging {
-        exceptionFormat 'full'
-    }
-}
-
 dependencies {
     compile 'org.json:json:20141113'
     testCompile 'junit:junit:4.12'
