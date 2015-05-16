@@ -30,8 +30,6 @@ android {
     }
 }
 
-apply from: 'build.work_around.gradle'
-
 dependencies {
     compile project(':json')
     compile 'com.android.support:appcompat-v7:22.1.1'
