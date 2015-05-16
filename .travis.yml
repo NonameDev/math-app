@@ -15,10 +15,10 @@ android:
     - '.+'
 
 script:
-  - ./gradlew clean assemble check -Dpre-dex=false --stacktrace
+ - ./gradlew clean :json:assemble :json:test :app:assembleDebug :app:check -Dpre-dex=false --stacktrace
 
 after_success:
- - ./gradlew jacocoTestReport coveralls --stacktrace
+ - ./gradlew :app:jacocoTestReport :app:coveralls --stacktrace
 
 branches:
   except:
