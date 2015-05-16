@@ -18,6 +18,23 @@ android {
         targetCompatibility JavaVersion.VERSION_1_7
     }
 
+    signingConfigs {
+        debug {
+            storeFile rootProject.file('debug.keystore')
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+        }
+
+        // TODO fix release
+        release {
+            storeFile rootProject.file('debug.keystore')
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -27,6 +44,36 @@ android {
 
     lintOptions {
         abortOnError false
+    }
+}
+
+android.applicationVariants.all { variant ->
+    if (variant.install) {
+        tasks.create(name: "run${variant.name.capitalize()}", type: Exec,
+                dependsOn: variant.install) {
+            group = 'Run'
+            description "Installs and Runs the APK for ${variant.description}."
+            def getMainActivity = { file ->
+                new XmlSlurper().parse(file).application.activity.find {
+                    it.'intent-filter'.find { filter ->
+                        return filter.action.find {
+                            it.'@android:name'.text() == 'android.intent.action.MAIN'
+                        } \
+                             && filter.category.find {
+                            it.'@android:name'.text() == 'android.intent.category.LAUNCHER'
+                        }
+                    }
+                }.'@android:name'
+            }
+            doFirst {
+                def activityClass =
+                        getMainActivity(variant.outputs.processManifest.manifestOutputFile)
+                commandLine android.adbExe, 'shell', 'am', 'start', '-n',
+                        "${variant.applicationId}/${activityClass}"
+
+                // or without the XML hacking: commandLine android.adbExe, 'shell', 'monkey', '-p', variant.applicationId, '1'
+            }
+        }
     }
 }
 
