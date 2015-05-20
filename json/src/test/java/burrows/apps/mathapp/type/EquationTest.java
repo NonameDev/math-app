@@ -11,9 +11,13 @@ import java.util.Set;
 public class EquationTest {
 
     private static final String EXPECTED_STRING = "Equation{Name{name},Variables{[symbol2(name2) = expression2, " +
-            "symbol1(name1) = expression1, symbol0(name0) = expression0]},Keywords{[keyword1, keyword2, keyword0]}}";
+            "symbol1(name1) = expression1, symbol0(name0) = expression0]},ImageKey{imageKey0},Category{category0},Keywords{[keyword1, keyword2, keyword0]}}";
     private static final String NAME = "name";
     private static final String OTHER_NAME = "otherName";
+    private static final String CATEGORY_0 = "category0";
+    private static final String CATEGORY_1 = "category1";
+    private static final String IMAGE_KEY_0 = "imageKey0";
+    private static final String IMAGE_KEY_1 = "imageKey1";
     private static final String KEYWORD_0 = "keyword0";
     private static final String KEYWORD_1= "keyword1";
     private static final String KEYWORD_2 = "keyword2";
@@ -69,6 +73,8 @@ public class EquationTest {
 
         final Equation eqn = new Equation.Builder()
                 .withName(NAME)
+                .withCategory(CATEGORY_0)
+                .withImageKey(IMAGE_KEY_0)
                 .withKeyWord(KEYWORD_0)
                 .withKeyWord(KEYWORD_1, KEYWORD_2)
                 .withVariable(VAR_0)
@@ -77,6 +83,8 @@ public class EquationTest {
                 .build();
 
         Assert.assertEquals(NAME, eqn.getName());
+        Assert.assertEquals(CATEGORY_0, eqn.getCategory());
+        Assert.assertEquals(IMAGE_KEY_0, eqn.getImageKey());
         Assert.assertEquals(expectedKeywords, eqn.getKeywords());
         Assert.assertEquals(expectedVariables, eqn.getVariables());
     }
@@ -85,15 +93,21 @@ public class EquationTest {
     public void testEquals() {
         final Equation eqn1 = new Equation.Builder()
                 .withName(NAME)
+                .withCategory(CATEGORY_0)
+                .withImageKey(IMAGE_KEY_0)
                 .withKeyWord(KEYWORD_0)
                 .withKeyWord(KEYWORD_1, KEYWORD_2)
                 .withVariable(VAR_0)
                 .withVariable(VAR_1)
                 .withVariable(VAR_2)
+                .withVariable(VAR_2)
+                .withVariable(VAR_2)
                 .build();
 
         final Equation eqn2 = new Equation.Builder()
                 .withName(NAME)
+                .withCategory(CATEGORY_0)
+                .withImageKey(IMAGE_KEY_0)
                 .withKeyWord(KEYWORD_0)
                 .withKeyWord(KEYWORD_1, KEYWORD_2)
                 .withVariable(VAR_0)
@@ -108,6 +122,8 @@ public class EquationTest {
     public void testEqualsDifferentName() {
         final Equation eqn1 = new Equation.Builder()
                 .withName(NAME)
+                .withCategory(CATEGORY_0)
+                .withImageKey(IMAGE_KEY_0)
                 .withKeyWord(KEYWORD_0)
                 .withKeyWord(KEYWORD_1, KEYWORD_2)
                 .withVariable(VAR_0)
@@ -117,6 +133,64 @@ public class EquationTest {
 
         final Equation eqn2 = new Equation.Builder()
                 .withName(OTHER_NAME)
+                .withCategory(CATEGORY_0)
+                .withImageKey(IMAGE_KEY_0)
+                .withKeyWord(KEYWORD_0)
+                .withKeyWord(KEYWORD_1, KEYWORD_2)
+                .withVariable(VAR_0)
+                .withVariable(VAR_1)
+                .withVariable(VAR_2)
+                .build();
+
+        Assert.assertFalse(eqn1.equals(eqn2));
+    }
+
+
+    @Test
+    public void testEqualsDifferentImageKey() {
+        final Equation eqn1 = new Equation.Builder()
+                .withName(NAME)
+                .withCategory(CATEGORY_0)
+                .withImageKey(IMAGE_KEY_0)
+                .withKeyWord(KEYWORD_0)
+                .withKeyWord(KEYWORD_1, KEYWORD_2)
+                .withVariable(VAR_0)
+                .withVariable(VAR_1)
+                .withVariable(VAR_2)
+                .build();
+
+        final Equation eqn2 = new Equation.Builder()
+                .withName(OTHER_NAME)
+                .withCategory(CATEGORY_0)
+                .withImageKey(IMAGE_KEY_1)
+                .withKeyWord(KEYWORD_0)
+                .withKeyWord(KEYWORD_1, KEYWORD_2)
+                .withVariable(VAR_0)
+                .withVariable(VAR_1)
+                .withVariable(VAR_2)
+                .build();
+
+        Assert.assertFalse(eqn1.equals(eqn2));
+    }
+
+
+    @Test
+    public void testEqualsDifferentCategory() {
+        final Equation eqn1 = new Equation.Builder()
+                .withName(NAME)
+                .withCategory(CATEGORY_0)
+                .withImageKey(IMAGE_KEY_0)
+                .withKeyWord(KEYWORD_0)
+                .withKeyWord(KEYWORD_1, KEYWORD_2)
+                .withVariable(VAR_0)
+                .withVariable(VAR_1)
+                .withVariable(VAR_2)
+                .build();
+
+        final Equation eqn2 = new Equation.Builder()
+                .withName(OTHER_NAME)
+                .withCategory(CATEGORY_1)
+                .withImageKey(IMAGE_KEY_0)
                 .withKeyWord(KEYWORD_0)
                 .withKeyWord(KEYWORD_1, KEYWORD_2)
                 .withVariable(VAR_0)
@@ -131,6 +205,8 @@ public class EquationTest {
     public void testEqualsDifferentKeywords() {
         final Equation eqn1 = new Equation.Builder()
                 .withName(NAME)
+                .withCategory(CATEGORY_0)
+                .withImageKey(IMAGE_KEY_0)
                 .withKeyWord(KEYWORD_0)
                 .withKeyWord(KEYWORD_1, KEYWORD_2)
                 .withVariable(VAR_0)
@@ -140,6 +216,8 @@ public class EquationTest {
 
         final Equation eqn2 = new Equation.Builder()
                 .withName(NAME)
+                .withCategory(CATEGORY_0)
+                .withImageKey(IMAGE_KEY_0)
                 .withKeyWord(KEYWORD_1, KEYWORD_2)
                 .withVariable(VAR_0)
                 .withVariable(VAR_1)
@@ -153,6 +231,8 @@ public class EquationTest {
     public void testEqualsDifferentVariables() {
         final Equation eqn1 = new Equation.Builder()
                 .withName(NAME)
+                .withCategory(CATEGORY_0)
+                .withImageKey(IMAGE_KEY_0)
                 .withKeyWord(KEYWORD_0)
                 .withKeyWord(KEYWORD_1, KEYWORD_2)
                 .withVariable(VAR_0)
@@ -162,6 +242,8 @@ public class EquationTest {
 
         final Equation eqn2 = new Equation.Builder()
                 .withName(OTHER_NAME)
+                .withCategory(CATEGORY_0)
+                .withImageKey(IMAGE_KEY_0)
                 .withKeyWord(KEYWORD_0)
                 .withKeyWord(KEYWORD_1, KEYWORD_2)
                 .withVariable(VAR_0)
@@ -175,6 +257,8 @@ public class EquationTest {
     public void testEqualsDifferentNull() {
         final Equation eqn1 = new Equation.Builder()
                 .withName(NAME)
+                .withCategory(CATEGORY_0)
+                .withImageKey(IMAGE_KEY_0)
                 .withKeyWord(KEYWORD_0)
                 .withKeyWord(KEYWORD_1, KEYWORD_2)
                 .withVariable(VAR_0)
@@ -189,6 +273,8 @@ public class EquationTest {
     public void testEqualsDifferentClass() {
         final Equation eqn1 = new Equation.Builder()
                 .withName(NAME)
+                .withCategory(CATEGORY_0)
+                .withImageKey(IMAGE_KEY_0)
                 .withKeyWord(KEYWORD_0)
                 .withKeyWord(KEYWORD_1, KEYWORD_2)
                 .withVariable(VAR_0)
@@ -203,6 +289,8 @@ public class EquationTest {
     public void testToString() {
         final Equation eqn = new Equation.Builder()
                 .withName(NAME)
+                .withCategory(CATEGORY_0)
+                .withImageKey(IMAGE_KEY_0)
                 .withKeyWord(KEYWORD_0)
                 .withKeyWord(KEYWORD_1, KEYWORD_2)
                 .withVariable(VAR_0)

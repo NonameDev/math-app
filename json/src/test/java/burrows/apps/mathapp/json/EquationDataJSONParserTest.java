@@ -15,11 +15,11 @@ import burrows.apps.mathapp.type.Variable;
  */
 public class EquationDataJSONParserTest {
 
-    private static final String TEST_DATA = "{\"equations\":[{\"name\":\"equation_name\",\"keywords\":[\"this\",\"is\""
-            + ",\"an\",\"equation\"],\"variables\":[{\"name\":\"var1\",\"symbol\":\"a\",\"expression\":\"b+c+d\"},"
-            + "{\"name\":\"var2\",\"symbol\":\"b\",\"expression\":\"a-c-d\"},{\"name\":\"var3\",\"symbol\":\"c\",\"ex"
-            + "pression\":\"a-b-d\"},{\"name\":\"var4\",\"symbol\":\"d\",\"expression\":\"a-b-c\"}]}]}\n";
-
+    private static final String TEST_DATA = "{\"equations\":[{\"name\":\"equation_name\",\"category\":\"math\"" +
+            ",\"image_key\":\"img\",\"keywords\":[\"this\",\"is\",\"an\",\"equation\"],\"variables\":[{\"name\":" +
+            "\"var1\",\"symbol\":\"a\",\"expression\":\"b+c+d\"},{\"name\":\"var2\",\"symbol\":\"b\",\"expression" +
+            "\":\"a-c-d\"},{\"name\":\"var3\",\"symbol\":\"c\",\"expression\":\"a-b-d\"},{\"name\":\"var4\",\"symbol" +
+            "\":\"d\",\"expression\":\"a-b-c\"}]}]}\n";
 
     @Test
     public void testParseData() {
@@ -56,6 +56,8 @@ public class EquationDataJSONParserTest {
                 .withName("equation_name")
                 .withVariable(variables)
                 .withKeyWord(keywords)
+                .withImageKey("img")
+                .withCategory("math")
                 .build());
 
         final EquationDataJSONParser jsonParser = new EquationDataJSONParser(TEST_DATA);

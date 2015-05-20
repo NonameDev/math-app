@@ -13,6 +13,8 @@ public class Equation {
      */
     private static final String NAME_FORMAT = "Equation{Name{%s},";
     private static final String VARIABLES_FORMAT = "Variables{%s},";
+    private static final String CATEGORY_FORMAT= "Category{%s},";
+    private static final String IMAGE_KEY_FORMAT = "ImageKey{%s},";
     private static final String KEYWORDS_FORMAT = "Keywords{%s}}";
 
     /**
@@ -27,6 +29,14 @@ public class Equation {
      * Keywords that describe the equation
      */
     private final Set<String> keywords;
+    /**
+     * Key used to download the image for the equation
+     */
+    private final String imageKey;
+    /**
+     * Category of the equation
+     */
+    private final String category;
 
     /**
      * Constructor. Sets the values of the fields to the given values
@@ -37,10 +47,14 @@ public class Equation {
      */
     private Equation(final String name,
                      final Set<Variable> variables,
-                     final Set<String> keywords) {
+                     final Set<String> keywords,
+                     final String imageKey,
+                     final String category) {
         this.name = name;
         this.variables = variables;
         this.keywords = keywords;
+        this.imageKey = imageKey;
+        this.category = category;
     }
 
     /**
@@ -50,7 +64,11 @@ public class Equation {
      * @param builder Builder used to build the equation
      */
     private Equation(final Builder builder) {
-        this(builder.name, builder.variables, builder.keywords);
+        this(builder.name,
+                builder.variables,
+                builder.keywords,
+                builder.imageKey,
+                builder.category);
     }
 
     /**
@@ -80,11 +98,32 @@ public class Equation {
         return this.keywords;
     }
 
+    /**
+     * Getter for the imageKey field of the equation
+     *
+     * @return String containing the key usewd to download the image for
+     *         the equation
+     */
+    public String getImageKey() {
+        return this.imageKey;
+    }
+
+    /**
+     * Getter for the category field of the equation
+     *
+     * @return String containing the category of the equation
+     */
+    public String getCategory() {
+        return this.category;
+    }
+
     @Override
     public String toString() {
         final StringBuilder stringBuilder =  new StringBuilder();
         stringBuilder.append(String.format(NAME_FORMAT, this.name));
         stringBuilder.append(String.format(VARIABLES_FORMAT, this.variables.toString()));
+        stringBuilder.append(String.format(IMAGE_KEY_FORMAT, this.imageKey));
+        stringBuilder.append(String.format(CATEGORY_FORMAT, this.category));
         stringBuilder.append(String.format(KEYWORDS_FORMAT, this.keywords.toString()));
         return stringBuilder.toString();
     }
@@ -99,6 +138,8 @@ public class Equation {
         if (!keywords.equals(equation.keywords)) return false;
         if (!name.equals(equation.name)) return false;
         if (!variables.equals(equation.variables)) return false;
+        if (!imageKey.equals(equation.imageKey)) return false;
+        if (!category.equals(equation.category)) return false;
 
         return true;
     }
@@ -108,6 +149,8 @@ public class Equation {
         int result = name.hashCode();
         result = 31 * result + variables.hashCode();
         result = 31 * result + keywords.hashCode();
+        result = 31 * result + imageKey.hashCode();
+        result = 31 * result + category.hashCode();
         return result;
     }
 
@@ -128,6 +171,8 @@ public class Equation {
          * Keywords for the equation of the variable being built
          */
         private Set<String> keywords;
+        private String imageKey;
+        private String category;
 
         /**
          * Constructor. Initializes the variables and keyword fields
@@ -162,7 +207,7 @@ public class Equation {
         }
 
         /**
-         * Adds the kiven keyword/keywords to the keywords field
+         * Adds the given keyword/keywords to the keywords field
          *
          * @param keyWord Strings containing keywords that will be added to
          *                the keywords field
@@ -172,6 +217,29 @@ public class Equation {
             for (final String k : keyWord) {
                 this.keywords.add(k);
             }
+            return this;
+        }
+
+        /**
+         * Sets imageKey field to the given imageKey
+         *
+         * @param imageKey String containing key used to download the image
+         *                 for the equation
+         * @return Builder current instance of the builder
+         */
+        public Builder withImageKey(final String imageKey) {
+            this.imageKey = imageKey;
+            return this;
+        }
+
+        /**
+         * Sets the category field to the given category
+         *
+         * @param category String containing the category of the equation
+         * @return Builder current instance of the builder
+         */
+        public Builder withCategory(final String category) {
+            this.category = category;
             return this;
         }
 

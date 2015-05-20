@@ -9,8 +9,10 @@ import java.util.List;
 import burrows.apps.mathapp.type.Equation;
 import burrows.apps.mathapp.type.Variable;
 
+import static burrows.apps.mathapp.json.Constants.CATEGORY_KEY;
 import static burrows.apps.mathapp.json.Constants.EQUATIONS_KEY;
 import static burrows.apps.mathapp.json.Constants.EXPRESSION_KEY;
+import static burrows.apps.mathapp.json.Constants.IMAGE_KEY;
 import static burrows.apps.mathapp.json.Constants.KEYWORDS_KEY;
 import static burrows.apps.mathapp.json.Constants.NAME_KEY;
 import static burrows.apps.mathapp.json.Constants.SYMBOL_KEY;
@@ -25,7 +27,9 @@ public class EquationDataJSONParser {
      * JSON object holding all the data in the file
      */
     private JSONObject eqnDataJsonObject;
-
+    /**
+     * List used to cache results from parsing
+     */
     private List<Equation> equations;
 
     /**
@@ -69,12 +73,16 @@ public class EquationDataJSONParser {
         final JSONArray rawVariableArray = rawEquation.getJSONArray(VARIABLES_KEY);
         final JSONArray rawKeywordsArray = rawEquation.getJSONArray(KEYWORDS_KEY);
         final String name = rawEquation.getString(NAME_KEY);
+        final String imageKey = rawEquation.getString(IMAGE_KEY);
+        final String category = rawEquation.getString(CATEGORY_KEY);
         final Variable[] variables = this.jsonArrayToVariableArray(rawVariableArray);
         final String[] keywords = this.jsonArrayToKeywordArray(rawKeywordsArray);
         return new Equation.Builder()
                 .withName(name)
                 .withVariable(variables)
                 .withKeyWord(keywords)
+                .withImageKey(imageKey)
+                .withCategory(category)
                 .build();
     }
 

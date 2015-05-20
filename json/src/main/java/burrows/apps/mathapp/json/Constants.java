@@ -29,5 +29,6 @@ public enum Constants {
     public static final String VARIABLES_KEY = "variables";
     public static final String SYMBOL_KEY = "symbol";
     public static final String EXPRESSION_KEY = "expression";
-
+    public static final String IMAGE_KEY = "image_key";
+    public static final String CATEGORY_KEY = "category";
 }
