@@ -1,5 +1,11 @@
-package burrows.apps.math;
+package burrows.apps.math.test;
 
+import burrows.apps.math.BuildConfig;
+
+/**
+ * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
+ * @since 0.0.1
+ */
 // Fix for android.content.res.Resources$NotFoundException: no such label burrows.apps.mathapp:string/app_name
 // https://github.com/robolectric/robolectric/issues/1623#issuecomment-93726148
 public final class CustomBuildConfig {
