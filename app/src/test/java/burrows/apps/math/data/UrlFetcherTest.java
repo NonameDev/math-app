@@ -10,8 +10,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.api.easymock.PowerMock;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.robolectric.RobolectricGradleTestRunner;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -24,7 +25,16 @@ import java.net.URL;
 /**
  * Unit test for the UrlFetcher class
  */
-@RunWith(PowerMockRunner.class)
+//@RunWith(PowerMockRunner.class)
+//@PrepareForTest({UrlFetcher.class,
+//        URL.class,
+//        InputStreamReader.class,
+//        BufferedReader.class,
+//        BufferedInputStream.class,
+//        Log.class})
+
+@RunWith(RobolectricGradleTestRunner.class)
+@PowerMockIgnore({"org.mockito.*", "org.robolectric.*", "android.*"})
 @PrepareForTest({UrlFetcher.class,
         URL.class,
         InputStreamReader.class,

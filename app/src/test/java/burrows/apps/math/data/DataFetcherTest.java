@@ -7,8 +7,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.api.easymock.PowerMock;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.robolectric.RobolectricGradleTestRunner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,13 @@ import burrows.apps.mathapp.type.Variable;
 /**
  * Unit test for the DataFetcher class
  */
-@RunWith(PowerMockRunner.class)
+//@RunWith(PowerMockRunner.class)
+//@PrepareForTest({DataFetcher.class,
+//        EquationDataJSONParser.class,
+//        VersionJSONParser.class})
+
+@RunWith(RobolectricGradleTestRunner.class)
+@PowerMockIgnore({"org.mockito.*", "org.robolectric.*", "android.*"})
 @PrepareForTest({DataFetcher.class,
         EquationDataJSONParser.class,
         VersionJSONParser.class})
@@ -38,7 +45,7 @@ public class DataFetcherTest {
     private static final String RESPONSE_STRING = "responseString";
     private static final String NAME = "name";
     private static final String KEYWORD = "keyword";
-    private static final String IMAGE_KEY= "imageKey";
+    private static final String IMAGE_KEY = "imageKey";
     private static final String CATEGORY = "category";
     private static final String SYMBOL = "symbol";
     private static final String EXPRESSION = "expression";

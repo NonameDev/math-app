@@ -148,6 +148,12 @@ dependencies {
     testCompile 'org.powermock:powermock-core:1.6.2'
     testCompile 'org.powermock:powermock-module-junit4:1.6.2'
     testCompile 'org.powermock:powermock-api-easymock:1.6.2'
+
+    testCompile 'org.powermock:powermock-module-junit4:1.6.2'
+    testCompile 'org.powermock:powermock-module-junit4-rule:1.6.2'
+    testCompile 'org.powermock:powermock-api-mockito:1.6.2'
+    testCompile 'org.powermock:powermock-classloading-xstream:1.6.2'
+
     testCompile 'org.apache.maven:maven-ant-tasks:2.1.3' // fixes mac crash
     testCompile('org.robolectric:shadows-support-v4:3.0-rc3') {
         exclude group: 'commons-logging', module: 'commons-logging'
