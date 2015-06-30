@@ -8,6 +8,7 @@ import burrows.apps.math.BuildConfig;
  */
 // Fix for android.content.res.Resources$NotFoundException: no such label burrows.apps.mathapp:string/app_name
 // https://github.com/robolectric/robolectric/issues/1623#issuecomment-93726148
+// Remove this once Robolectric 3 comes out
 public final class CustomBuildConfig {
     public static final boolean DEBUG = BuildConfig.DEBUG;
     public static final String APPLICATION_ID = "burrows.apps.math";

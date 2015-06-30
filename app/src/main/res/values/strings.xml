@@ -1,3 +1,15 @@
-<resources>
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="UnusedResources,TypographyDashes">
+
     <string name="app_name">MathApp</string>
+    <string name="menu_share">Share</string>
+    <string name="menu_feedback">Send Feedback</string>
+    <string name="menu_donate">Remove Ads</string>
+    <string name="menu_version">Version Info</string>
+    <string name="menu_play">View in Google Play Store</string>
+    <string name="menu_help_feedback">Help &amp; Feedback</string>
+    <string name="menu_help">Help</string>
+    <string name="menu_search">Search</string>
+    <string name="text_version">Version</string>
+
 </resources>

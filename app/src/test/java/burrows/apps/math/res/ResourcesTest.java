@@ -3,18 +3,16 @@ package burrows.apps.math.res;
 import android.annotation.TargetApi;
 import android.os.Build.VERSION_CODES;
 
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricGradleTestRunner;
+import org.robolectric.RuntimeEnvironment;
 
 import burrows.apps.math.R;
 import burrows.apps.math.test.TestBase;
-
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-import static org.robolectric.RuntimeEnvironment.application;
 
 /**
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
@@ -26,11 +24,11 @@ public class ResourcesTest extends TestBase {
     @TargetApi(VERSION_CODES.LOLLIPOP)
     @Test
     public void test_imageResources() {
-        assertThat(application.getDrawable(R.mipmap.ic_launcher), not(nullValue()));
+        MatcherAssert.assertThat(RuntimeEnvironment.application.getDrawable(R.mipmap.ic_launcher), CoreMatchers.not(Matchers.nullValue()));
     }
 
     @Test
     public void test_stringResources() {
-        assertThat(application.getString(R.string.app_name), is("MathApp"));
+        MatcherAssert.assertThat(RuntimeEnvironment.application.getString(R.string.app_name), Matchers.is("MathApp"));
     }
 }

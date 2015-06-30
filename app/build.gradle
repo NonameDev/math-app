@@ -6,11 +6,11 @@ apply plugin: 'com.github.triplet.play'
 
 ext {
     limits = ['instruction': 90,
-              'branch'     : 90,
-              'line'       : 90,
-              'complexity' : 90,
-              'method'     : 90,
-              'class'      : 90]
+              'branch'     : 80,
+              'line'       : 80,
+              'complexity' : 80,
+              'method'     : 80,
+              'class'      : 80]
 }
 
 def currentManifestFile = file('./src/main/AndroidManifest.xml')
@@ -108,15 +108,6 @@ if (System.getenv("TRAVIS")) {
         def manifestContent = matcher.
                 replaceAll('versionCode=\"' + ++Integer.parseInt(matcher.group(1)) + '\"')
         currentManifestFile.write(manifestContent)
-
-        // Increment versionname by 0.01
-        matcher = Pattern.compile('versionName=\"(\\d+)\\.(\\d+)\"').
-                matcher(currentManifestFile.getText())
-        matcher.find()
-        def versionName = String.format("%.2f", Integer.parseInt(matcher.group(1)) +
-                Double.parseDouble("." + matcher.group(2)) + 0.01)
-        manifestContent = matcher.replaceAll('versionName=\"' + versionName + '\"')
-        currentManifestFile.write(manifestContent)
     }
     incrementVersion.dependsOn 'testDebug'
 
@@ -129,7 +120,7 @@ if (System.getenv("TRAVIS")) {
     publish.dependsOn incrementVersion
 }
 
-// remove warning about json
+// remove warning about json, for now
 configurations {
     all {
         exclude group: 'org.json' // our module is called 'json'
@@ -141,6 +132,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.2.0'
     compile 'com.android.support:cardview-v7:22.2.0'
     compile 'com.android.support:recyclerview-v7:22.2.0'
+    compile 'com.android.support:design:22.2.0'
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.hamcrest:hamcrest-integration:1.3'
