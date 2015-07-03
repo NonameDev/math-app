@@ -1,13 +1,12 @@
 package burrows.apps.math.test;
 
 import org.junit.Before;
+import org.robolectric.RuntimeEnvironment;
+import org.robolectric.Shadows;
 import org.robolectric.shadows.ShadowApplication;
+import org.robolectric.util.ReflectionHelpers;
 
 import burrows.apps.math.BuildConfig;
-
-import static org.robolectric.RuntimeEnvironment.application;
-import static org.robolectric.Shadows.shadowOf;
-import static org.robolectric.util.ReflectionHelpers.setStaticField;
 
 /**
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
@@ -15,15 +14,15 @@ import static org.robolectric.util.ReflectionHelpers.setStaticField;
  */
 public class TestBase {
 
-    String GOOGLE_ANALYTICS_SERVICE = "com.google.android.gms.analytics.service.START";
+    private static final String GOOGLE_ANALYTICS_SERVICE = "com.google.android.gms.analytics.service.START";
 
     @Before
     public void setUp() {
         // Turn off Google Analytics
-        ShadowApplication shadowApplication = shadowOf(application);
+        final ShadowApplication shadowApplication = Shadows.shadowOf(RuntimeEnvironment.application);
         shadowApplication.declareActionUnbindable(GOOGLE_ANALYTICS_SERVICE);
 
         // Use the debug configuration
-        setStaticField(BuildConfig.class, "DEBUG", false);
+        ReflectionHelpers.setStaticField(BuildConfig.class, "DEBUG", false);
     }
 }
