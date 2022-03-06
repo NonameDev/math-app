@@ -1,7 +1,11 @@
-apply plugin: 'java'
+apply plugin: 'java-library'
 
-dependencies {
-    compile 'org.json:json:20141113'
-    testCompile 'junit:junit:4.12'
+java {
+  sourceCompatibility = JavaVersion.VERSION_11
+  targetCompatibility = JavaVersion.VERSION_11
 }
 
+dependencies {
+    implementation 'org.json:json:20211205'
+    testImplementation 'junit:junit:4.13.2'
+}
