@@ -1,35 +1,24 @@
 import java.util.regex.Pattern
 
 apply plugin: 'com.android.application'
-apply plugin: 'com.github.kt3k.coveralls'
 apply plugin: 'com.github.triplet.play'
-
-ext {
-    limits = ['instruction': 90,
-              'branch'     : 80,
-              'line'       : 80,
-              'complexity' : 80,
-              'method'     : 80,
-              'class'      : 80]
-}
 
 def currentManifestFile = file('./src/main/AndroidManifest.xml')
 
 android {
-    compileSdkVersion 22
-    buildToolsVersion '22.0.1'
+    compileSdkVersion 31
 
     defaultConfig {
         applicationId 'burrows.apps.mathapp'
-        minSdkVersion 9
-        targetSdkVersion 22
+        minSdkVersion 21
+        targetSdkVersion 31
         versionCode 1
         versionName '1.0'
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
 
     signingConfigs {
@@ -60,36 +49,12 @@ android {
     lintOptions {
         abortOnError false
     }
-}
 
-android.applicationVariants.all { variant ->
-    if (variant.install) {
-        tasks.create(name: "run${variant.name.capitalize()}", type: Exec,
-                dependsOn: variant.install) {
-            group = 'Run'
-            description "Installs and Runs the APK for ${variant.description}."
-            def getMainActivity = { file ->
-                new XmlSlurper().parse(file).application.activity.find {
-                    it.'intent-filter'.find { filter ->
-                        return filter.action.find {
-                            it.'@android:name'.text() == 'android.intent.action.MAIN'
-                        } \
-                              && filter.category.find {
-                            it.'@android:name'.text() == 'android.intent.category.LAUNCHER'
-                        }
-                    }
-                }.'@android:name'
-            }
-            doFirst {
-                def activityClass =
-                        getMainActivity(variant.outputs.processManifest.manifestOutputFile)
-                commandLine android.adbExe, 'shell', 'am', 'start', '-n',
-                        "${variant.applicationId}/${activityClass}"
-
-                // or without the XML hacking: commandLine android.adbExe, 'shell', 'monkey',
-                // '-p', variant.applicationId, '1'
-            }
-        }
+    testOptions {
+      unitTests {
+        returnDefaultValues = true
+        includeAndroidResources = true
+      }
     }
 }
 
@@ -120,120 +85,25 @@ if (System.getenv("TRAVIS")) {
     publish.dependsOn incrementVersion
 }
 
-// remove warning about json, for now
-configurations {
-    all {
-        exclude group: 'org.json' // our module is called 'json'
-    }
-}
-
 dependencies {
-    compile project(':json')
-    compile 'com.android.support:appcompat-v7:22.2.0'
-    compile 'com.android.support:cardview-v7:22.2.0'
-    compile 'com.android.support:recyclerview-v7:22.2.0'
-    compile 'com.android.support:design:22.2.0'
+    implementation project(':json')
+    implementation 'com.android.support:appcompat-v7:22.2.0'
+    implementation 'com.android.support:cardview-v7:22.2.0'
+    implementation 'com.android.support:recyclerview-v7:22.2.0'
+    implementation 'com.android.support:design:22.2.0'
 
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.hamcrest:hamcrest-integration:1.3'
-    testCompile 'org.easymock:easymock:3.3.1'
-    testCompile 'org.powermock:powermock-core:1.6.2'
-    testCompile 'org.powermock:powermock-module-junit4:1.6.2'
-    testCompile 'org.powermock:powermock-api-easymock:1.6.2'
-    testCompile 'org.apache.maven:maven-ant-tasks:2.1.3' // fixes mac crash
-    testCompile('org.robolectric:shadows-support-v4:3.0-rc3') {
-        exclude group: 'commons-logging', module: 'commons-logging'
-        exclude group: 'org.apache.httpcomponents', module: 'httpclient'
-    }
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.hamcrest:hamcrest-integration:1.3'
+    testImplementation 'org.easymock:easymock:4.3'
+    testImplementation 'org.powermock:powermock-core:2.0.9'
+    testImplementation 'org.powermock:powermock-module-junit4:2.0.9'
+    testImplementation 'org.powermock:powermock-api-easymock:2.0.9'
+    testImplementation 'org.robolectric:robolectric:4.7.3'
+    testImplementation 'org.robolectric:annotations:4.7.3'
+    testImplementation 'androidx.test:annotation:1.0.0'
+    testImplementation 'androidx.test:core:1.4.0'
+    testImplementation 'androidx.test.ext:junit:1.1.3'
+    testImplementation 'androidx.test:rules:1.4.0'
+    testImplementation 'androidx.test:runner:1.4.0'
 }
 
-task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebug']) {
-    group 'Reporting'
-    description 'Generate Jacoco coverage reports after running tests.'
-
-    reports {
-        xml {
-            enabled true // coveralls
-            destination "${project.buildDir}/reports/jacoco/test/jacocoTestReport.xml"
-        }
-
-        html {
-            enabled true
-            destination "${project.buildDir}/reports/jacoco/test/html"
-        }
-    }
-
-    // use hidden configuration, for details look into JacocoPlugin.groovy
-    jacocoClasspath = project.configurations['androidJacocoAnt']
-
-    // exclude auto-generated classes and tests
-    def fileFilter = ['burrows/apps/math/data/**', '**/R.class', '**/R$*.class', '**/BuildConfig' +
-            '.*', '**/Manifest*.*', '**/*Test*.*',
-                      'android/**/*.*']
-    def debugTree =
-            fileTree(dir: "${project.buildDir}/intermediates/classes/debug", excludes: fileFilter)
-    def mainSrc = "${project.projectDir}/src/main/java"
-
-    sourceDirectories = files([mainSrc])
-    additionalSourceDirs = files([mainSrc])
-    classDirectories = files([debugTree])
-    executionData = fileTree(dir: project.projectDir, includes: ['**/*.exec', '**/*.ec'])
-
-    // Make sure we pass code coverage
-    doLast {
-        def report = file("${jacoco.reportsDir}/test/jacocoTestReport.xml")
-        def htmlReport = file("${jacoco.reportsDir}/test/html/index.html")
-        logger.lifecycle("Checking coverage results: ${report}")
-        logger.lifecycle("Html report: ${htmlReport}")
-
-        def parser = new XmlParser()
-        parser.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
-        parser.setFeature("http://apache.org/xml/features/disallow-doctype-decl", false)
-        def results = parser.parse(report)
-
-        def percentage = {
-            if (null == it) {
-                //if it does not exist assume 100%
-                return 100
-            }
-            def covered = it.'@covered' as Double
-            def missed = it.'@missed' as Double
-            ((covered / (covered + missed)) * 100).round(2)
-        }
-
-        def counters = results.counter
-        def metrics = [:]
-        metrics << ['instruction': percentage(counters.find { it.'@type'.equals('INSTRUCTION') }),
-                'branch'     : percentage(counters.find { it.'@type'.equals('BRANCH') }),
-                'line'       : percentage(counters.find { it.'@type'.equals('LINE') }),
-                'complexity' : percentage(counters.find { it.'@type'.equals('COMPLEXITY') }),
-                'method'     : percentage(counters.find { it.'@type'.equals('METHOD') }),
-                'class'      : percentage(counters.find { it.'@type'.equals('CLASS') })]
-
-        def failures = []
-        def canIncrease = []
-        metrics.each {
-            def limit = limits[it.key]
-            if (it.value < limit) {
-                failures.add("  ${it.key} coverage:\t${it.value}%,\tminimum:\t${limit}%")
-            }
-            if (it.value > limit + 1) {
-                canIncrease.add("  ${it.key} coverage:\t${it.value}%,\tminimum:\t${limit}%")
-            }
-        }
-
-        if (failures) {
-            logger.quiet("\nCode Coverage Failed:\n")
-            failures.each {
-                logger.quiet(it)
-            }
-            throw new GradleException("Code coverage failed")
-        }
-        if (canIncrease) {
-            logger.quiet("\nCode Coverage:\n")
-            canIncrease.each {
-                logger.quiet(it)
-            }
-        }
-    }
-}

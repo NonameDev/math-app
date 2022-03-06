@@ -4,6 +4,8 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.Toolbar;
 
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -11,7 +13,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
-import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.Shadows;
 import org.robolectric.fakes.RoboMenuItem;
 import org.robolectric.shadows.ShadowActivity;
@@ -20,11 +21,7 @@ import burrows.apps.math.R;
 import burrows.apps.math.test.TestBase;
 
 
-/**
- * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
- * @since 0.0.1
- */
-@RunWith(RobolectricGradleTestRunner.class)
+@RunWith(AndroidJUnit4.class)
 public class MainActivityTest extends TestBase {
 
     private MainActivity activity;
