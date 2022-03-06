@@ -1,0 +1,64 @@
+name: build
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    types: [ opened, labeled, unlabeled, synchronize ]
+
+env:
+  GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4g -Dorg.gradle.daemon=false"
+
+jobs:
+  android:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        java-version:
+          - 11
+
+    steps:
+      - name: Checkout Project
+        uses: actions/checkout@v2.4.0
+
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v1.0.4
+
+      - name: Cache Gradle dependencies
+        uses: actions/cache@v2.1.0
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper/
+            ~/.android/build-cache
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: ${{ runner.os }}-gradle-
+
+      - name: Configure JDK
+        uses: actions/setup-java@v2.5.0
+        with:
+          distribution: temurin
+          java-version: ${{ matrix.java-version }}
+
+      - name: Build Debug APKs
+        run: ./gradlew clean assembleDebug -Pci -s --scan
+
+      - name: Run Debug Checks
+        run: ./gradlew lintDebug -Pci -s --scan
+
+      - name: Run Debug Unit Tests
+        run: ./gradlew testDebug -Pci -s --scan
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v2.3.1
+        if: always()
+        with:
+          name: android-gif-example-${{ github.workflow }}-${{ github.run_id }}
+          path: |
+            app/build/outputs
+            app/build/reports
+            app/build/test-results
+          if-no-files-found: warn

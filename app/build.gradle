@@ -1,9 +1,4 @@
-import java.util.regex.Pattern
-
 apply plugin: 'com.android.application'
-apply plugin: 'com.github.triplet.play'
-
-def currentManifestFile = file('./src/main/AndroidManifest.xml')
 
 android {
     compileSdkVersion 31
@@ -29,13 +24,11 @@ android {
             keyPassword 'android'
         }
 
-        if (System.getenv("TRAVIS")) {
-            release {
-                storeFile rootProject.file('release.keystore')
-                storePassword System.getenv("KEYSTORE_PASS")
-                keyAlias System.getenv("ALIAS_NAME")
-                keyPassword System.getenv("ALIAS_PASS")
-            }
+        release {
+            storeFile rootProject.file('release.keystore')
+            storePassword System.getenv("KEYSTORE_PASS")
+            keyAlias System.getenv("ALIAS_NAME")
+            keyPassword System.getenv("ALIAS_PASS")
         }
     }
 
@@ -56,33 +49,6 @@ android {
         includeAndroidResources = true
       }
     }
-}
-
-if (System.getenv("TRAVIS")) {
-    play {
-        serviceAccountEmail = System.getenv("SERVICE_EMAIL")
-        pk12File = rootProject.file('play.p12')
-        track = 'production' // or 'alpha' or 'beta' or 'production'
-    }
-
-    task incrementVersion << {
-        // Increment versioncode by 1
-        def matcher = Pattern.compile('versionCode=\"(\\d+)\"').
-                matcher(currentManifestFile.getText())
-        matcher.find()
-        def manifestContent = matcher.
-                replaceAll('versionCode=\"' + ++Integer.parseInt(matcher.group(1)) + '\"')
-        currentManifestFile.write(manifestContent)
-    }
-    incrementVersion.dependsOn 'testDebug'
-
-    // Run testFreeDebug(fast build + fast test) -> increment version -> publish free and paid
-    // release
-    task publish(dependsOn: ['publishApkRelease']) {
-        group = 'BurrowsApps Publishing'
-        description = 'Publish to Google Play'
-    }
-    publish.dependsOn incrementVersion
 }
 
 dependencies {
@@ -106,4 +72,3 @@ dependencies {
     testImplementation 'androidx.test:rules:1.4.0'
     testImplementation 'androidx.test:runner:1.4.0'
 }
-
